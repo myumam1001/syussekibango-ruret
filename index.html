@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>1〜33 ルーレット（重複なし）</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-color: #f0f8ff;
+    }
+    #number {
+      font-size: 80px;
+      margin: 30px;
+      color: #2c3e50;
+    }
+    #history {
+      margin-top: 30px;
+      font-size: 18px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>1〜33 ルーレット（重複なし）</h1>
+  <div id="number">?</div>
+  <button onclick="spinRoulette()" id="spinButton">スタート！</button>
+  <div id="history">出た数字: <span id="usedNumbers">なし</span></div>
+
+  <script>
+    let numbers = Array.from({ length: 33 }, (_, i) => i + 1); // 1〜33の配列
+    let used = [];
+
+    function spinRoulette() {
+      if (numbers.length === 0) {
+        document.getElementById("number").textContent = "終了！";
+        document.getElementById("spinButton").disabled = true;
+        return;
+      }
+
+      let numberDiv = document.getElementById("number");
+      let count = 0;
+      let spinning;
+
+      spinning = setInterval(() => {
+        const preview = Math.floor(Math.random() * 33) + 1;
+        numberDiv.textContent = preview;
+        count++;
+        if (count > 30) {
+          clearInterval(spinning);
+
+          // 実際に出すランダムな数字（未使用の中から）
+          const index = Math.floor(Math.random() * numbers.length);
+          const chosen = numbers.splice(index, 1)[0];
+          used.push(chosen);
+          numberDiv.textContent = chosen;
+
+          // 履歴表示
+          document.getElementById("usedNumbers").textContent = used.join(', ');
+        }
+      }, 80);
+    }
+  </script>
+</body>
+</html>
